@@ -1,0 +1,160 @@
+-- services
+local UIS = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+
+-- setup
+local gui = Instance.new("ScreenGui")
+local frame = Instance.new("Frame")
+local topBar = Instance.new("Frame")
+local scrollFrame = Instance.new("ScrollingFrame")
+local corner = Instance.new("UICorner")
+
+gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+gui.ResetOnSpawn = false
+
+frame.Parent = gui
+frame.BackgroundColor3 = Color3.fromRGB(53, 58, 70)
+frame.BorderSizePixel = 0
+frame.Position = UDim2.new(0.35, 0, 0.28, 0)
+frame.Size = UDim2.new(0, 582, 0, 332)
+frame.Active = true
+
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = frame
+
+topBar.Parent = frame
+topBar.BackgroundTransparency = 1
+topBar.Size = UDim2.new(1, 0, 0, 20)
+
+scrollFrame.Parent = frame
+scrollFrame.Active = true
+scrollFrame.BackgroundColor3 = Color3.fromRGB(25, 26, 31)
+scrollFrame.BorderSizePixel = 0
+scrollFrame.Position = UDim2.new(0.019, 0, 0.069, 0)
+scrollFrame.Size = UDim2.new(0, 561, 0, 297)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 1, 0)
+
+-- helper functions
+local function makeLabel(text, pos, size, fontSize, align)
+	local l = Instance.new("TextLabel")
+	l.Parent = scrollFrame
+	l.BackgroundTransparency = 1
+	l.Position = pos
+	l.Size = size
+	l.Font = Enum.Font.Arial
+	l.Text = text
+	l.TextColor3 = Color3.fromRGB(180, 180, 180)
+	l.TextSize = fontSize or 18
+	l.TextXAlignment = align or Enum.TextXAlignment.Left
+	return l
+end
+
+local function makeButton(parent, text, pos, size, dark)
+	local b = Instance.new("TextButton")
+	b.Parent = parent
+	b.BackgroundColor3 = dark and Color3.fromRGB(11, 46, 111) or Color3.fromRGB(255, 255, 255)
+	b.BorderSizePixel = 0
+	b.Position = pos
+	b.Size = size
+	b.Font = Enum.Font.SourceSans
+	b.Text = text
+	b.TextColor3 = dark and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(0, 0, 0)
+	b.TextScaled = true
+	b.TextWrapped = true
+	return b
+end
+
+-- top bar
+local minimizeBtn = makeButton(topBar, "_", UDim2.new(0.018, 0, 0, 0), UDim2.new(0, 20, 0, 19), true)
+minimizeBtn.Font = Enum.Font.SourceSansBold
+
+local title = Instance.new("TextLabel")
+title.Parent = topBar
+title.BackgroundTransparency = 1
+title.Position = UDim2.new(0.077, 0, 0, 0)
+title.Size = UDim2.new(0, 525, 0, 19)
+title.Font = Enum.Font.SourceSansBold
+title.Text = "BEST SCRIPT MENU 1000% BUNII APPROVED TUNG TUNG TUNG SAHUR APPROVED FE SCRIPTS"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextSize = 14
+title.TextXAlignment = Enum.TextXAlignment.Left
+
+-- info labels
+local keybindLabel = makeLabel("Hide GUI Key: RightShift", UDim2.new(0.035, 0, 0, 118), UDim2.new(0, 300, 0, 22))
+makeLabel("made by @imjudealonzo and @hayden.8012", UDim2.new(0, 0, 0, 6), UDim2.new(0, 561, 0, 25), 22, Enum.TextXAlignment.Center)
+
+-- keybind button
+local keybindBtn = makeButton(scrollFrame, "Change Keybind", UDim2.new(0.035, 0, 0, 145), UDim2.new(0, 157, 0, 29), true)
+
+-- actual script buttons
+local scripts = {
+	{ name = "Infinite Yield",               pos = UDim2.new(0.035, 0, 0, 40), url = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source" },
+	{ name = "Nullfire/Doors script                    (needs key) ",      pos = UDim2.new(0.347, 0, 0, 40), url = "https://raw.githubusercontent.com/TeamNullFire/NullFire/main/loader.lua" },
+	{ name = "Jude's FE Telekinesis Tool",          pos = UDim2.new(0.664, 0, 0, 40), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/scripts/ORIGINAL%20SCRIPTS/telekinesis-rewrite.lua" },
+	{ name = "Midi player (needs key)",                  pos = UDim2.new(0.035, 0, 0, 76), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/romidi-needskey.lua" },
+	{ name = "Jude's ultimate random night script (currently broken)", pos = UDim2.new(0.347, 0, 0, 76), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/scripts/ORIGINAL%20SCRIPTS/jude-urn-script.lua" },
+	{ name = "Dark Dex V4",                 pos = UDim2.new(0.664, 0, 0, 76), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/darkdex-v4.lua" },
+}
+
+for _, s in ipairs(scripts) do
+	local btn = makeButton(scrollFrame, s.name, s.pos, UDim2.new(0, 157, 0, 29), false)
+	btn.MouseButton1Click:Connect(function()
+		loadstring(game:HttpGet(s.url))()
+	end)
+end
+
+-- minimize
+local minimized = false
+minimizeBtn.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	frame.Size = minimized and UDim2.new(0, 582, 0, 20) or UDim2.new(0, 582, 0, 332)
+	scrollFrame.Visible = not minimized
+end)
+
+-- hide and rebind
+local guiVisible = true
+local hideKey = Enum.KeyCode.RightShift
+local listening = false
+
+keybindBtn.MouseButton1Click:Connect(function()
+	listening = true
+	keybindLabel.Text = "Hide GUI Key: [Press any key...]"
+	keybindBtn.Text = "Waiting..."
+end)
+
+UIS.InputBegan:Connect(function(input)
+	if listening and input.UserInputType == Enum.UserInputType.Keyboard then
+		hideKey = input.KeyCode
+		keybindLabel.Text = "Hide GUI Key: " .. input.KeyCode.Name
+		keybindBtn.Text = "Change Keybind"
+		listening = false
+		return
+	end
+	if input.KeyCode == hideKey then
+		guiVisible = not guiVisible
+		frame.Visible = guiVisible
+	end
+end)
+
+-- dragging
+local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
+
+topBar.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging, dragStart, startPos = true, input.Position, frame.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then dragging = false end
+		end)
+	end
+end)
+
+topBar.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement then dragInput = input end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		local d = input.Position - dragStart
+		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+	end
+end)
