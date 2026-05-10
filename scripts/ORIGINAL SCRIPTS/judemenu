@@ -93,7 +93,7 @@ local scripts = {
 	{ name = "Jude's FE Telekinesis Tool",          pos = UDim2.new(0.664, 0, 0, 40), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/scripts/ORIGINAL%20SCRIPTS/telekinesis-rewrite.lua" },
 	{ name = "Midi player (needs key)",                  pos = UDim2.new(0.035, 0, 0, 76), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/romidi-needskey.lua" },
 	{ name = "Jude's ultimate random night script (currently broken)", pos = UDim2.new(0.347, 0, 0, 76), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/scripts/ORIGINAL%20SCRIPTS/jude-urn-script.lua" },
-	{ name = "Dark Dex V4",                 pos = UDim2.new(0.664, 0, 0, 76), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/darkdex-v4.lua" },
+	{ name = "Dark Dex V4",                 pos = UDim2.new(0.664, 0, 0, 76), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/scripts/darkdex-v4.lua" },
 }
 
 for _, s in ipairs(scripts) do
