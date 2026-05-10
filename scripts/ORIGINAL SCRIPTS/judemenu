@@ -1,6 +1,7 @@
 -- services
 local UIS = game:GetService("UserInputService")
 local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 
 -- setup
 local gui = Instance.new("ScreenGui")
@@ -13,11 +14,12 @@ gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
 gui.ResetOnSpawn = false
 
 frame.Parent = gui
+frame.Active = true
 frame.BackgroundColor3 = Color3.fromRGB(53, 58, 70)
 frame.BorderSizePixel = 0
+frame.ClipsDescendants = false
 frame.Position = UDim2.new(0.35, 0, 0.28, 0)
 frame.Size = UDim2.new(0, 582, 0, 332)
-frame.Active = true
 
 corner.CornerRadius = UDim.new(0, 10)
 corner.Parent = frame
@@ -33,11 +35,12 @@ scrollFrame.BorderSizePixel = 0
 scrollFrame.Position = UDim2.new(0.019, 0, 0.069, 0)
 scrollFrame.Size = UDim2.new(0, 561, 0, 297)
 scrollFrame.CanvasSize = UDim2.new(0, 0, 1, 0)
+scrollFrame.ScrollBarThickness = 4
 
 -- helper functions
-local function makeLabel(text, pos, size, fontSize, align)
+local function makeLabel(text, pos, size, fontSize, align, parent)
 	local l = Instance.new("TextLabel")
-	l.Parent = scrollFrame
+	l.Parent = parent or scrollFrame
 	l.BackgroundTransparency = 1
 	l.Position = pos
 	l.Size = size
@@ -80,20 +83,31 @@ title.TextSize = 14
 title.TextXAlignment = Enum.TextXAlignment.Left
 
 -- info labels
-local keybindLabel = makeLabel("Hide GUI Key: RightShift", UDim2.new(0.035, 0, 0, 118), UDim2.new(0, 300, 0, 22))
+local keybindLabel = makeLabel("Hide GUI Key: RightShift", UDim2.new(0.035, 0, 0, 185), UDim2.new(0, 300, 0, 22))
 makeLabel("made by @imjudealonzo and @hayden.8012", UDim2.new(0, 0, 0, 6), UDim2.new(0, 561, 0, 25), 22, Enum.TextXAlignment.Center)
 
--- keybind button
-local keybindBtn = makeButton(scrollFrame, "Change Keybind", UDim2.new(0.035, 0, 0, 145), UDim2.new(0, 157, 0, 29), true)
+-- keybind + info buttons
+local keybindBtn = makeButton(scrollFrame, "Change Keybind", UDim2.new(0.035, 0, 0, 212), UDim2.new(0, 157, 0, 29), true)
+local infoBtn    = makeButton(scrollFrame, "Info for scripts (please read)", UDim2.new(0, 319, 0, 259), UDim2.new(0, 229, 0, 29), true)
 
 -- actual script buttons
+-- Row 1 (y=40), Row 2 (y=76), Row 3 (y=112), Row 4 (y=148)
 local scripts = {
-	{ name = "Infinite Yield",               pos = UDim2.new(0.035, 0, 0, 40), url = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source" },
-	{ name = "Nullfire/Doors script                    (needs key) ",      pos = UDim2.new(0.347, 0, 0, 40), url = "https://raw.githubusercontent.com/TeamNullFire/NullFire/main/loader.lua" },
-	{ name = "Jude's FE Telekinesis Tool",          pos = UDim2.new(0.664, 0, 0, 40), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/scripts/ORIGINAL%20SCRIPTS/telekinesis-rewrite.lua" },
-	{ name = "Midi player (needs key)",                  pos = UDim2.new(0.035, 0, 0, 76), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/romidi-needskey.lua" },
-	{ name = "Jude's ultimate random night script (currently broken)", pos = UDim2.new(0.347, 0, 0, 76), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/scripts/ORIGINAL%20SCRIPTS/jude-urn-script.lua" },
-	{ name = "Dark Dex V4",                 pos = UDim2.new(0.664, 0, 0, 76), url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/scripts/darkdex-v4.lua" },
+	-- Row 1
+	{ name = "Infinite Yield",                                pos = UDim2.new(0.035, 0, 0, 40),  url = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source" },
+	{ name = "Nullfire/Doors script\n(needs key)",            pos = UDim2.new(0.347, 0, 0, 40),  url = "https://raw.githubusercontent.com/TeamNullFire/NullFire/main/loader.lua" },
+	{ name = "Jude's FE Telekinesis Tool",                    pos = UDim2.new(0.664, 0, 0, 40),  url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/scripts/ORIGINAL%20SCRIPTS/telekinesis-rewrite.lua" },
+	-- Row 2
+	{ name = "Midi player\n(needs key)",                      pos = UDim2.new(0.035, 0, 0, 76),  url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/romidi-needskey.lua" },
+	{ name = "Jude's ultimate random\nnight script (broken)", pos = UDim2.new(0.347, 0, 0, 76),  url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/scripts/ORIGINAL%20SCRIPTS/jude-urn-script.lua" },
+	{ name = "Dark Dex V4",                                   pos = UDim2.new(0.664, 0, 0, 76),  url = "https://raw.githubusercontent.com/judealonzo/judemenu/refs/heads/main/darkdex-v4.lua" },
+	-- Row 3
+	{ name = "Sandevistan\n(Animation Script)",               pos = UDim2.new(0.035, 0, 0, 112), url = "https://raw.githubusercontent.com/mahowaga51-cmd/FE-Scripts/refs/heads/main/FE%20Sandevistan%20V6" },
+	{ name = "Deathnote",                                     pos = UDim2.new(0.347, 0, 0, 112), url = "PLACEHOLDER_URL" },
+	{ name = "Telekinesis V6",                                pos = UDim2.new(0.664, 0, 0, 112), url = "PLACEHOLDER_URL" },
+	-- Row 4
+	{ name = "Telekinesis V5",                                pos = UDim2.new(0.035, 0, 0, 148), url = "PLACEHOLDER_URL" },
+	{ name = "CSGO Movement",                                 pos = UDim2.new(0.347, 0, 0, 148), url = "PLACEHOLDER_URL" },
 }
 
 for _, s in ipairs(scripts) do
@@ -103,12 +117,208 @@ for _, s in ipairs(scripts) do
 	end)
 end
 
+-- info panel
+local INFO_WIDTH = 220
+local TWEEN_INFO = TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+
+-- Wrapper clips the inner panel so it slides out from the right edge of frame
+-- Inset 10px top/bottom so the main frame's rounded corners stay visible
+local panelWrapper = Instance.new("Frame")
+panelWrapper.Parent = frame
+panelWrapper.BackgroundTransparency = 1
+panelWrapper.ClipsDescendants = true
+panelWrapper.BorderSizePixel = 0
+panelWrapper.Position = UDim2.new(1, 0, 0, 10)
+panelWrapper.Size = UDim2.new(0, 0, 1, -20)   -- starts fully collapsed (width = 0)
+
+-- The actual panel; offset -10px on X so the left rounded corners are hidden
+-- behind the main frame, giving the visual of flat left / rounded right
+local infoPanel = Instance.new("Frame")
+infoPanel.Parent = panelWrapper
+infoPanel.BackgroundColor3 = Color3.fromRGB(45, 49, 60)
+infoPanel.BorderSizePixel = 0
+infoPanel.Position = UDim2.new(0, -10, 0, 0)
+infoPanel.Size = UDim2.new(0, 225, 1, 0)
+
+local infoPanelCorner = Instance.new("UICorner")
+infoPanelCorner.CornerRadius = UDim.new(0, 10)
+infoPanelCorner.Parent = infoPanel
+
+-- Info panel top bar
+local infoTopBar = Instance.new("Frame")
+infoTopBar.Parent = infoPanel
+infoTopBar.BackgroundColor3 = Color3.fromRGB(30, 33, 42)
+infoTopBar.BorderSizePixel = 0
+infoTopBar.Size = UDim2.new(1, 0, 0, 26)
+
+local infoTopCorner = Instance.new("UICorner")
+infoTopCorner.CornerRadius = UDim.new(0, 10)
+infoTopCorner.Parent = infoTopBar
+
+-- Patch to square off the bottom of the top bar (UICorner rounds all corners)
+local infoTopPatch = Instance.new("Frame")
+infoTopPatch.Parent = infoTopBar
+infoTopPatch.BackgroundColor3 = Color3.fromRGB(30, 33, 42)
+infoTopPatch.BorderSizePixel = 0
+infoTopPatch.Position = UDim2.new(0, 0, 0.5, 0)
+infoTopPatch.Size = UDim2.new(1, 0, 0.5, 0)
+
+local infoTitleLabel = Instance.new("TextLabel")
+infoTitleLabel.Parent = infoTopBar
+infoTitleLabel.BackgroundTransparency = 1
+infoTitleLabel.Position = UDim2.new(0, 14, 0, 0)
+infoTitleLabel.Size = UDim2.new(1, -52, 1, 0)
+infoTitleLabel.Font = Enum.Font.SourceSansBold
+infoTitleLabel.Text = "Script Info"
+infoTitleLabel.TextColor3 = Color3.fromRGB(220, 220, 230)
+infoTitleLabel.TextSize = 13
+infoTitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local infoCloseBtn = Instance.new("TextButton")
+infoCloseBtn.Parent = infoTopBar
+infoCloseBtn.BackgroundColor3 = Color3.fromRGB(185, 45, 45)
+infoCloseBtn.BorderSizePixel = 0
+infoCloseBtn.Position = UDim2.new(1, -24, 0.5, -9)
+infoCloseBtn.Size = UDim2.new(0, 18, 0, 18)
+infoCloseBtn.Font = Enum.Font.SourceSansBold
+infoCloseBtn.Text = "X"
+infoCloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+infoCloseBtn.TextScaled = true
+local infoCloseBtnCorner = Instance.new("UICorner")
+infoCloseBtnCorner.CornerRadius = UDim.new(0, 4)
+infoCloseBtnCorner.Parent = infoCloseBtn
+
+-- Info scrolling area
+local infoScroll = Instance.new("ScrollingFrame")
+infoScroll.Parent = infoPanel
+infoScroll.BackgroundColor3 = Color3.fromRGB(20, 22, 28)
+infoScroll.BorderSizePixel = 0
+infoScroll.Position = UDim2.new(0, 10, 0, 30)
+infoScroll.Size = UDim2.new(1, -14, 1, -34)
+infoScroll.ScrollBarThickness = 3
+infoScroll.ScrollBarImageColor3 = Color3.fromRGB(80, 90, 120)
+infoScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+infoScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+
+local listLayout = Instance.new("UIListLayout")
+listLayout.Parent = infoScroll
+listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+listLayout.Padding = UDim.new(0, 5)
+
+local listPad = Instance.new("UIPadding")
+listPad.Parent = infoScroll
+listPad.PaddingTop = UDim.new(0, 5)
+listPad.PaddingLeft = UDim.new(0, 4)
+listPad.PaddingRight = UDim.new(0, 4)
+
+-- script info
+local scriptInfos = {
+	{ title = "Infinite Yield",           desc = "admin/utility command script. Gives access to a LOT of ingame manipulation commands. Press ; and type 'cmds' to see all." },
+	{ title = "Nullfire / Doors",          desc = "TeamNullFire hub. Best for Doors. Requires a key." },
+	{ title = "FE Telekinesis (by me)",    desc = "Jude's rewritten FE Telekinesis tool. Original by DOXPLOV. Only works for unanchored objects." },
+	{ title = "Midi Player",              desc = "Play MIDI files on ingame instruments. Has a full library of songs. Also supports local MIDI files. Requires a key." },
+	{ title = "Jude's URN Script",        desc = "Ultimate Random Night script by Jude. Currently broken, fixing soon." },
+	{ title = "Dark Dex V4",              desc = "Explorer tool for inspecting the game's object tree in real time. Great for making your own scripts, or just messing around." },
+	{ title = "Sandevistan",              desc = "Animation script. It's kinda broken but pretty cool." },
+	{ title = "Deathnote",               desc = "Type someone's name in the deathnote, and it teleports to them and flings them, then teleports you back to where you were." },
+	{ title = "Telekinesis V6",           desc = "Big complicated-ish menu for telekinesis, but it has cool features such as flinging everything around you." },
+	{ title = "Telekinesis V5",           desc = "Previous version of the Telekinesis tool. It's a bit simpler. Gives you a tool." },
+	{ title = "CSGO Movement",            desc = "Replicates CSGO style movement physics in Roblox games. Bhop, air strafing, etc." },
+}
+
+local function addInfoEntry(info, order)
+	local card = Instance.new("Frame")
+	card.Parent = infoScroll
+	card.BackgroundColor3 = Color3.fromRGB(32, 35, 45)
+	card.BorderSizePixel = 0
+	card.Size = UDim2.new(1, 0, 0, 0)
+	card.AutomaticSize = Enum.AutomaticSize.Y
+	card.LayoutOrder = order
+
+	local cardCorner = Instance.new("UICorner")
+	cardCorner.CornerRadius = UDim.new(0, 5)
+	cardCorner.Parent = card
+
+	local cardPad = Instance.new("UIPadding")
+	cardPad.Parent = card
+	cardPad.PaddingTop = UDim.new(0, 5)
+	cardPad.PaddingBottom = UDim.new(0, 5)
+	cardPad.PaddingLeft = UDim.new(0, 6)
+	cardPad.PaddingRight = UDim.new(0, 6)
+
+	local cardLayout = Instance.new("UIListLayout")
+	cardLayout.Parent = card
+	cardLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	cardLayout.Padding = UDim.new(0, 2)
+
+	local titleLbl = Instance.new("TextLabel")
+	titleLbl.Parent = card
+	titleLbl.BackgroundTransparency = 1
+	titleLbl.Size = UDim2.new(1, 0, 0, 15)
+	titleLbl.Font = Enum.Font.SourceSansBold
+	titleLbl.Text = info.title
+	titleLbl.TextColor3 = Color3.fromRGB(210, 215, 255)
+	titleLbl.TextSize = 12
+	titleLbl.TextXAlignment = Enum.TextXAlignment.Left
+	titleLbl.LayoutOrder = 1
+
+	local descLbl = Instance.new("TextLabel")
+	descLbl.Parent = card
+	descLbl.BackgroundTransparency = 1
+	descLbl.Size = UDim2.new(1, 0, 0, 0)
+	descLbl.AutomaticSize = Enum.AutomaticSize.Y
+	descLbl.Font = Enum.Font.Arial
+	descLbl.Text = info.desc
+	descLbl.TextColor3 = Color3.fromRGB(140, 145, 165)
+	descLbl.TextSize = 10
+	descLbl.TextXAlignment = Enum.TextXAlignment.Left
+	descLbl.TextWrapped = true
+	descLbl.LayoutOrder = 2
+end
+
+for i, info in ipairs(scriptInfos) do
+	addInfoEntry(info, i)
+end
+
+-- panel open/close logic
+local panelOpen = false
+local panelTween = nil
+
+local function openPanel()
+	if panelOpen then return end
+	panelOpen = true
+	if panelTween then panelTween:Cancel() end
+	panelTween = TweenService:Create(panelWrapper, TWEEN_INFO, {
+		Size = UDim2.new(0, INFO_WIDTH, 1, -20)
+	})
+	panelTween:Play()
+end
+
+local function closePanel()
+	if not panelOpen then return end
+	panelOpen = false
+	if panelTween then panelTween:Cancel() end
+	panelTween = TweenService:Create(panelWrapper, TWEEN_INFO, {
+		Size = UDim2.new(0, 0, 1, -20)
+	})
+	panelTween:Play()
+end
+
+infoBtn.MouseButton1Click:Connect(openPanel)
+infoCloseBtn.MouseButton1Click:Connect(closePanel)
+
 -- minimize
 local minimized = false
 minimizeBtn.MouseButton1Click:Connect(function()
 	minimized = not minimized
-	frame.Size = minimized and UDim2.new(0, 582, 0, 20) or UDim2.new(0, 582, 0, 332)
-	scrollFrame.Visible = not minimized
+	if minimized then
+		frame.Size = UDim2.new(0, 582, 0, 20)
+		scrollFrame.Visible = false
+		closePanel()
+	else
+		frame.Size = UDim2.new(0, 582, 0, 332)
+		scrollFrame.Visible = true
+	end
 end)
 
 -- hide and rebind
@@ -155,6 +365,9 @@ end)
 UIS.InputChanged:Connect(function(input)
 	if input == dragInput and dragging then
 		local d = input.Position - dragStart
-		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+		frame.Position = UDim2.new(
+			startPos.X.Scale, startPos.X.Offset + d.X,
+			startPos.Y.Scale, startPos.Y.Offset + d.Y
+		)
 	end
 end)
