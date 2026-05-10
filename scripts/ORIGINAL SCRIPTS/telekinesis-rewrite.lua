@@ -2,9 +2,6 @@
 -- i rewrote this so it's easier to read and i also added a few features
 -- original script creator youtube: https://www.youtube.com/c/DOXPLOV/
 ------------------------------------------------------------------------
-
-
--- Sandboxes a function so "script" refers to the given instance
 local function sandbox(var, func)
 	local env = getfenv(func)
 	setfenv(func, setmetatable({}, {
@@ -23,45 +20,42 @@ local mas  = Instance.new("Model", game:GetService("Lighting"))
 --------------------------
 
 local Tool = Instance.new("Tool")
-Tool.Name        = "Telekinesis Gun"
+Tool.Name         = "Telekinesis Gun"
 Tool.CanBeDropped = false
-Tool.Parent      = mas
+Tool.Parent       = mas
 
--- Invisible handle (required by Roblox for tool grip)
 local Handle = Instance.new("Part")
-Handle.Name         = "Handle"
-Handle.Material     = Enum.Material.Neon
-Handle.BrickColor   = BrickColor.new("Cyan")
-Handle.Color        = Color3.new(0.0157, 0.6863, 0.9255)
-Handle.Transparency = 1
-Handle.CanCollide   = false
-Handle.FormFactor   = Enum.FormFactor.Custom
-Handle.Size         = Vector3.new(1, 0.4, 0.3)
-Handle.CFrame       = CFrame.new(-55.2695, 0.6965, 0.3832,
+Handle.Name          = "Handle"
+Handle.Material      = Enum.Material.Neon
+Handle.BrickColor    = BrickColor.new("Cyan")
+Handle.Color         = Color3.new(0.0157, 0.6863, 0.9255)
+Handle.Transparency  = 1
+Handle.CanCollide    = false
+Handle.FormFactor    = Enum.FormFactor.Custom
+Handle.Size          = Vector3.new(1, 0.4, 0.3)
+Handle.CFrame        = CFrame.new(-55.2695, 0.6965, 0.3832,
 	0.9640, -4.98e-05, 0.2659, 4.80e-05, 1, 1.33e-05, -0.2659, -5.31e-08, 0.9640)
 Handle.BottomSurface = Enum.SurfaceType.Smooth
 Handle.TopSurface    = Enum.SurfaceType.Smooth
 Handle.Parent        = Tool
 Instance.new("CylinderMesh", Handle).Scale = Vector3.new(0.1, 0.1, 0.1)
 
--- Muzzle / shoot point
 local Shoot = Instance.new("Part")
-Shoot.Name         = "Shoot"
-Shoot.Material     = Enum.Material.Neon
-Shoot.BrickColor   = BrickColor.new("Cyan")
-Shoot.Color        = Color3.new(0.0157, 0.6863, 0.9255)
-Shoot.Reflectance  = 0.3
-Shoot.Transparency = 1
-Shoot.CanCollide   = false
-Shoot.FormFactor   = Enum.FormFactor.Custom
-Shoot.Size         = Vector3.new(0.2, 0.25, 0.31)
-Shoot.CFrame       = CFrame.new(-54.7998, 0.7743, -0.7574,
+Shoot.Name          = "Shoot"
+Shoot.Material      = Enum.Material.Neon
+Shoot.BrickColor    = BrickColor.new("Cyan")
+Shoot.Color         = Color3.new(0.0157, 0.6863, 0.9255)
+Shoot.Reflectance   = 0.3
+Shoot.Transparency  = 1
+Shoot.CanCollide    = false
+Shoot.FormFactor    = Enum.FormFactor.Custom
+Shoot.Size          = Vector3.new(0.2, 0.25, 0.31)
+Shoot.CFrame        = CFrame.new(-54.7998, 0.7743, -0.7574,
 	-0.0246, 0.9997, 0.0046, 0.0169, 0.0050, -0.9998, -0.9996, -0.0245, -0.0170)
 Shoot.BottomSurface = Enum.SurfaceType.Smooth
 Shoot.TopSurface    = Enum.SurfaceType.Smooth
 Shoot.Parent        = Tool
 
--- Glowing barrel cylinder
 local GlowBarrel = Instance.new("Part")
 GlowBarrel.Name         = "GlowPart"
 GlowBarrel.Material     = Enum.Material.Neon
@@ -72,9 +66,8 @@ GlowBarrel.Shape        = Enum.PartType.Cylinder
 GlowBarrel.Size         = Vector3.new(1.2, 0.65, 2)
 GlowBarrel.CFrame       = CFrame.new(-54.8192, 0.7735, -0.0523,
 	0.0074, 4.68e-11, -1.0000, 4.73e-11, 1, 1.42e-10, 1.0000, 5.09e-11, 0.0074)
-GlowBarrel.Parent = Tool
+GlowBarrel.Parent       = Tool
 
--- Top decorative fin
 local GlowFin1 = Instance.new("Part")
 GlowFin1.Name         = "GlowPart"
 GlowFin1.Material     = Enum.Material.Neon
@@ -84,9 +77,8 @@ GlowFin1.Transparency = 0.5
 GlowFin1.Size         = Vector3.new(0.28, 0.26, 0.2)
 GlowFin1.CFrame       = CFrame.new(-54.9809, 0.9984, 0.7994,
 	0.0074, 0.5630, -0.8265, 4.73e-11, 0.8265, 0.5630, 1.0000, -0.0041, 0.0061)
-GlowFin1.Parent = Tool
+GlowFin1.Parent       = Tool
 
--- Bottom decorative fin
 local GlowFin2 = Instance.new("Part")
 GlowFin2.Name         = "GlowPart"
 GlowFin2.Material     = Enum.Material.Neon
@@ -96,20 +88,16 @@ GlowFin2.Transparency = 0.5
 GlowFin2.Size         = Vector3.new(0.28, 0.26, 0.2)
 GlowFin2.CFrame       = CFrame.new(-54.5909, 0.9784, 0.7994,
 	-0.0830, -0.5845, -0.8072, 0.0241, 0.8085, -0.5880, 0.9963, -0.0683, -0.0530)
-GlowFin2.Parent = Tool
+GlowFin2.Parent       = Tool
 
--- AnimateValue used by the Animate script to trigger arm animations
 local AnimateValue = Instance.new("StringValue")
 AnimateValue.Name   = "AnimateValue"
 AnimateValue.Value  = "None"
 AnimateValue.Parent = Tool
 
-----------------------------------------------------------------------------------------------
--- Glow Scripts (one per glowing part — pulses transparency up and down)
------------------------------------------------------------------------------------------------
-
-local GLOW_LEVELS = {0.5, 0.6, 0.7, 0.8, 0.9, 0.8, 0.7, 0.6}
-
+------------------------------
+-- Glow Scripts
+----------------------------------------
 local function attachGlowScript(part)
 	local s = Instance.new("Script")
 	s.Name   = "Glow Script"
@@ -129,9 +117,9 @@ attachGlowScript(GlowBarrel)
 attachGlowScript(GlowFin1)
 attachGlowScript(GlowFin2)
 
-----------------------------------------------------------------------------
--- LineConnect Script (draws a laser beam between two parts; spawned dynamically)
---------------------------------------------------------------------------------
+----------------------------------
+-- LineConnect Script
+-----------------------------------------
 
 local LineConnect = Instance.new("Script")
 LineConnect.Name     = "LineConnect"
@@ -143,19 +131,19 @@ table.insert(cors, sandbox(LineConnect, function()
 	local part2    = script.Part2.Value
 	local parent   = script.Par.Value
 	local colorRef = script.Color
-	local checkVal = script.Part2  -- laser disappears when this is nil
+	local checkVal = script.Part2
 
 	local line = Instance.new("Part")
-	line.Name        = "Laser"
-	line.TopSurface  = 0
+	line.Name          = "Laser"
+	line.TopSurface    = 0
 	line.BottomSurface = 0
-	line.Locked      = true
-	line.CanCollide  = false
-	line.Anchored    = true
-	line.formFactor  = 0
-	line.Size        = Vector3.new(0.4, 0.4, 1)
-	line.Material    = "Neon"
-	line.Transparency = 0.2
+	line.Locked        = true
+	line.CanCollide    = false
+	line.Anchored      = true
+	line.formFactor    = 0
+	line.Size          = Vector3.new(0.4, 0.4, 1)
+	line.Material      = "Neon"
+	line.Transparency  = 0.2
 	local mesh = Instance.new("BlockMesh", line)
 
 	while true do
@@ -178,18 +166,17 @@ table.insert(cors, sandbox(LineConnect, function()
 	script:Remove()
 end))
 
---------------------------------------------------------------------------------
--- qPerfectionWeld Script (welds all parts in the model to the Handle)
---------------------------------------------------------------------------------
+--------------------------------
+-- qPerfectionWeld Script
+----------------------------------
 
 local WeldScript = Instance.new("Script")
 WeldScript.Name   = "qPerfectionWeld"
 WeldScript.Parent = Tool
 table.insert(cors, sandbox(WeldScript, function()
 	local NEVER_BREAK_JOINTS = false
-
-	local HINGE_SURFACES   = {"Hinge", "Motor", "SteppingMotor"}
-	local SURFACE_NAMES    = {"TopSurface","BottomSurface","LeftSurface","RightSurface","FrontSurface","BackSurface"}
+	local HINGE_SURFACES     = {"Hinge", "Motor", "SteppingMotor"}
+	local SURFACE_NAMES      = {"TopSurface","BottomSurface","LeftSurface","RightSurface","FrontSurface","BackSurface"}
 
 	local function eachDescendant(instance, fn)
 		fn(instance)
@@ -225,9 +212,7 @@ table.insert(cors, sandbox(WeldScript, function()
 		local connected = part:GetConnectedParts()
 		if #connected == 1 then return false end
 		for _, item in ipairs(connected) do
-			if hasHingeSurface(item) or not item:IsDescendantOf(script.Parent) then
-				return false
-			end
+			if hasHingeSurface(item) or not item:IsDescendantOf(script.Parent) then return false end
 		end
 		return true
 	end
@@ -241,12 +226,11 @@ table.insert(cors, sandbox(WeldScript, function()
 		weld.C0      = CFrame.new()
 		weld.C1      = relVal and relVal.Value or part.CFrame:toObjectSpace(mainPart.CFrame)
 		weld.Parent  = part
-
 		if not relVal then
-			local v        = Instance.new("CFrameValue", part)
-			v.Name         = "qRelativeCFrameWeldValue"
-			v.Archivable   = true
-			v.Value        = weld.C1
+			local v      = Instance.new("CFrameValue", part)
+			v.Name       = "qRelativeCFrameWeldValue"
+			v.Archivable = true
+			v.Value      = weld.C1
 		end
 	end
 
@@ -256,20 +240,15 @@ table.insert(cors, sandbox(WeldScript, function()
 		local primary = (tool and tool:FindFirstChild("Handle") and tool.Handle:IsA("BasePart") and tool.Handle)
 			or (script.Parent:IsA("Model") and script.Parent.PrimaryPart)
 			or parts[1]
-
 		if not primary then warn("qPerfectionWeld: No primary part found.") return tool end
-
 		for _, part in ipairs(parts) do
 			if shouldBreakJoints(part) then part:BreakJoints() end
 		end
 		for _, part in ipairs(parts) do
 			if part ~= primary then weldTogether(primary, part) end
 		end
-		for _, part in ipairs(parts) do
-			part.Anchored = false
-		end
+		for _, part in ipairs(parts) do part.Anchored = false end
 		primary.Anchored = false
-
 		return tool
 	end
 
@@ -279,20 +258,19 @@ table.insert(cors, sandbox(WeldScript, function()
 	end
 end))
 
--------------------------------------------------------------------------------------------
--- Animate Script (arm/neck poses when tool is equipped, with shoot/reload anims)
------------------------------------------------------------------------------------------
+-------------------
+-- Animate Script
+------------------------
 
 local AnimateScript = Instance.new("LocalScript")
 AnimateScript.Name   = "Animate"
 AnimateScript.Parent = Tool
 table.insert(cors, sandbox(AnimateScript, function()
-	local Tool = script.Parent
-	local welds = {}
+	local Tool            = script.Parent
+	local welds           = {}
 	local arms, torso, neck
 	local DEFAULT_NECK_C0 = CFrame.new(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 1, 0)
 
-	-- Helper: build weld CFrames for each arm
 	local function leftArmCF(yaw, y)
 		return CFrame.new(1, y or 0.8, 0.9) * CFrame.fromEulerAnglesXYZ(math.rad(290), yaw, math.rad(-90))
 	end
@@ -312,7 +290,6 @@ table.insert(cors, sandbox(AnimateScript, function()
 		end
 	end
 
-	-- Each frame: {leftArmCF, rightArmCF}
 	local SHOOT_FRAMES = {
 		{leftArmCF(0),    rightArmCF(-90)},
 		{leftArmCF(0.05), rightArmCF(-90)},
@@ -320,7 +297,7 @@ table.insert(cors, sandbox(AnimateScript, function()
 		{leftArmCF(0.3),  rightArmCF(-110)},
 		{leftArmCF(0.35), rightArmCF(-115)},
 		{leftArmCF(0.4),  rightArmCF(-120)},
-		{leftArmCF(0),    rightArmCF(-90)},  -- return to idle
+		{leftArmCF(0),    rightArmCF(-90)},
 	}
 
 	local RELOAD_FRAMES = {
@@ -337,7 +314,7 @@ table.insert(cors, sandbox(AnimateScript, function()
 		{leftArmCF(0.57, 1.1), rightArmCF(-120)},
 		{leftArmCF(0.6,  1.2), rightArmCF(-120)},
 		{leftArmCF(0.6,  1.3), rightArmCF(-120)},
-		{leftArmCF(0,    0.8), rightArmCF(-90)},  -- return to idle
+		{leftArmCF(0,    0.8), rightArmCF(-90)},
 	}
 
 	Tool.Equipped:Connect(function(mouse)
@@ -347,11 +324,11 @@ table.insert(cors, sandbox(AnimateScript, function()
 		torso = char:FindFirstChild("Torso")
 		neck  = torso.Neck
 
-		local head           = char:FindFirstChild("Head")
-		local leftShoulder   = torso:FindFirstChild("Left Shoulder")
-		local rightShoulder  = torso:FindFirstChild("Right Shoulder")
-		leftShoulder.Part1   = nil
-		rightShoulder.Part1  = nil
+		local head          = char:FindFirstChild("Head")
+		local leftShoulder  = torso:FindFirstChild("Left Shoulder")
+		local rightShoulder = torso:FindFirstChild("Right Shoulder")
+		leftShoulder.Part1  = nil
+		rightShoulder.Part1 = nil
 
 		local w1 = Instance.new("Weld", head)
 		w1.Part0, w1.Part1, w1.C1 = head, arms[1], leftArmCF(0)
@@ -391,21 +368,21 @@ table.insert(cors, sandbox(AnimateScript, function()
 	end)
 end))
 
----------------------------------------------------------------------------
--- Aim Script (rotates character neck/shoulder/torso to track the mouse)
---------------------------------------------------------------------------------
+----------------
+-- Aim Script
+----------------
 
 local AimScript = Instance.new("LocalScript")
 AimScript.Parent = Tool
 table.insert(cors, sandbox(AimScript, function()
-	local RunService          = game:GetService("RunService")
+	local RunService           = game:GetService("RunService")
 	local ContextActionService = game:GetService("ContextActionService")
-	local UserInputService    = game:GetService("UserInputService")
+	local UserInputService     = game:GetService("UserInputService")
 
-	local player      = game.Players.LocalPlayer
-	local mouse       = player:GetMouse()
-	local Tool        = script.Parent
-	local screenSpace = require(Tool:WaitForChild("ScreenSpace"))
+	local player           = game.Players.LocalPlayer
+	local mouse            = player:GetMouse()
+	local Tool             = script.Parent
+	local screenSpace      = require(Tool:WaitForChild("ScreenSpace"))
 
 	local neck, shoulder, savedNeckC0, savedShoulderC0
 	local connection
@@ -427,14 +404,12 @@ table.insert(cors, sandbox(AimScript, function()
 		local head  = char.Head
 		local arm   = char:FindFirstChild("Right Arm")
 
-		-- Vertical angle (neck + shoulder)
 		local toMouse   = (targetPos - head.Position).unit
 		local angle     = math.acos(math.clamp(toMouse:Dot(Vector3.new(0,1,0)), -1, 1))
 		local neckAngle = math.min(angle, math.rad(110))
 		neck.C0 = CFrame.new(0, 1, 0) * CFrame.Angles(math.pi - neckAngle, math.pi, 0)
 
-		-- Horizontal angle (torso rotation)
-		local armOrigin  = torso.Position + torso.CFrame:vectorToWorldSpace(
+		local armOrigin   = torso.Position + torso.CFrame:vectorToWorldSpace(
 			Vector3.new(torso.Size.X/2 + arm.Size.X/2, torso.Size.Y/2 - arm.Size.Z/2, 0))
 		local toMouseFlat = ((targetPos - armOrigin) * Vector3.new(1,0,1)).unit
 		local lookFlat    = (torso.CFrame.lookVector * Vector3.new(1,0,1)).unit
@@ -504,40 +479,42 @@ table.insert(cors, sandbox(AimScript, function()
 		if connection then connection:Disconnect() end
 		ContextActionService:UnbindAction("Reload")
 		game.ReplicatedStorage.ROBLOX_PistolUnequipEvent:FireServer()
-		mouse.Icon    = ""
-		neck.C0       = savedNeckC0
-		shoulder.C0   = savedShoulderC0
+		mouse.Icon  = ""
+		neck.C0     = savedNeckC0
+		shoulder.C0 = savedShoulderC0
 	end)
 end))
 
 ----------------------------------------------------------------------------
--- Main Script (telekinesis grab, move, and utility key bindings)
---------------------------------------------------------------------------
+-- Main Script  (grab highlight + keybind GUI + rebinding + toggles)
+----------------------------------------------------------------------------
 
 local MainScript = Instance.new("LocalScript")
 MainScript.Name   = "MainScript"
 MainScript.Parent = Tool
 table.insert(cors, sandbox(MainScript, function()
 	wait()
-	local tool        = script.Parent
-	local lineconnect = tool.LineConnect
+	local tool             = script.Parent
+	local lineconnect      = tool.LineConnect
+	local Players          = game:GetService("Players")
+	local UserInputService = game:GetService("UserInputService")
+	local player           = Players.LocalPlayer
 
 	local object    = nil   -- currently grabbed part
 	local mousedown = false
 	local dist      = nil
-	local objval    = nil   -- ObjectValue pointing to grabbed part (for laser cleanup)
+	local objval    = nil
 	local hooked    = false
 
-	-- Strong BodyPosition for moving grabbed objects
+	-- BodyPositions
 	local BP = Instance.new("BodyPosition")
 	BP.maxForce = Vector3.new(math.huge, math.huge, math.huge)
 	BP.P        = BP.P * 10
 
-	-- Weaker BodyPosition for hooking the player to an object
 	local hookBP = BP:Clone()
 	hookBP.maxForce = Vector3.new(30000, 30000, 30000)
 
-	-- Small glowing sphere that travels with the beam tip
+	-- Beam tip sphere 
 	local point = Instance.new("Part")
 	point.Locked     = true
 	point.Anchored   = true
@@ -551,10 +528,354 @@ table.insert(cors, sandbox(MainScript, function()
 	pointMesh.MeshType = "Sphere"
 	pointMesh.Scale    = Vector3.new(0.2, 0.2, 0.2)
 
-	local front = tool.Shoot   -- origin of the beam
-	local color = tool.Shoot   -- source of beam color (reads BrickColor/Reflectance)
+	local front = tool.Shoot
+	local color = tool.Shoot
 
-	-- Clones the LineConnect script and wires it up between two parts
+	-- GRAB HIGHLIGHT
+	local GUN_BLUE = Color3.new(0.0157, 0.6863, 0.9255)
+
+	local grabHighlight = Instance.new("Highlight")
+	grabHighlight.FillColor           = GUN_BLUE
+	grabHighlight.FillTransparency    = 0.45
+	grabHighlight.OutlineColor        = Color3.new(1, 1, 1)
+	grabHighlight.OutlineTransparency = 0
+	grabHighlight.Enabled             = false
+	grabHighlight.Parent              = workspace
+
+	local function setHighlight(part)
+		if part then
+			grabHighlight.Adornee = part
+			grabHighlight.Enabled = true
+		else
+			grabHighlight.Enabled = false
+			grabHighlight.Adornee = nil
+		end
+	end
+
+	-- KEYBIND TABLE
+	--   Default hook/reset keys are "f"/"g" (originals were stripped chars).
+
+	local keybinds = {
+		{ id = "pull",      key = "q",   label = "Pull Object Closer",    enabled = true },
+		{ id = "push",      key = "e",   label = "Push Object Further",   enabled = true },
+		{ id = "freeze",    key = "t",   label = "Freeze Object Rotation", enabled = true },
+		{ id = "delete",    key = "r",   label = "Disintegrate Object",   enabled = true },
+		{ id = "duplicate", key = "x",   label = "Duplicate Object",      enabled = true },
+		{ id = "cube",      key = "c",   label = "Spawn Weighted Cube",   enabled = true },
+		{ id = "explode",   key = "esc", label = "Explode Object",        enabled = true },
+		{ id = "hook",      key = "f",   label = "Hook Player to Object", enabled = true },
+		{ id = "reset",     key = "g",   label = "Reset Distance (15)",   enabled = true },
+	}
+
+	-- Returns the keybind entry for a given id
+	local function kb(id)
+		for _, b in ipairs(keybinds) do
+			if b.id == id then return b end
+		end
+	end
+
+	-- True when rawKey (from mouse.KeyDown) matches a stored key string
+	local function rawMatches(storedKey, rawKey)
+		if storedKey == "esc" then return string.byte(rawKey) == 27 end
+		return rawKey:lower() == storedKey
+	end
+
+	-- KEYBIND GUI
+
+	-- Remove any leftover GUI from a previous life
+	local existing = player.PlayerGui:FindFirstChild("TelekinesisGUI")
+	if existing then existing:Destroy() end
+
+	local menuOpen = true
+
+	local screenGui = Instance.new("ScreenGui")
+	screenGui.Name         = "TelekinesisGUI"
+	screenGui.ResetOnSpawn = false
+	screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	screenGui.Parent       = player.PlayerGui
+
+	-- Main frame 
+	local frame = Instance.new("Frame")
+	frame.Name             = "MainFrame"
+	frame.Size             = UDim2.new(0, 330, 0, 370)
+	frame.Position         = UDim2.new(0.02, 0, 0.28, 0)
+	frame.BackgroundColor3 = Color3.fromRGB(10, 12, 18)
+	frame.BorderSizePixel  = 0
+	frame.ClipsDescendants = true
+	frame.Parent           = screenGui
+	Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 10)
+
+	local frameStroke = Instance.new("UIStroke", frame)
+	frameStroke.Color     = GUN_BLUE
+	frameStroke.Thickness = 2
+
+	-- Title bar
+	local titleBar = Instance.new("Frame")
+	titleBar.Name             = "TitleBar"
+	titleBar.Size             = UDim2.new(1, 0, 0, 40)
+	titleBar.BackgroundColor3 = GUN_BLUE
+	titleBar.BorderSizePixel  = 0
+	titleBar.ZIndex           = 2
+	titleBar.Parent           = frame
+
+	local titleLabel = Instance.new("TextLabel")
+	titleLabel.Size               = UDim2.new(1, -50, 1, 0)
+	titleLabel.Position           = UDim2.new(0, 12, 0, 0)
+	titleLabel.BackgroundTransparency = 1
+	titleLabel.Text               = "✦  Jude's Telekinesis"
+	titleLabel.TextColor3         = Color3.fromRGB(255, 255, 255)
+	titleLabel.TextSize           = 14
+	titleLabel.Font               = Enum.Font.GothamBold
+	titleLabel.TextXAlignment     = Enum.TextXAlignment.Left
+	titleLabel.ZIndex             = 3
+	titleLabel.Parent             = titleBar
+
+	local closeBtn = Instance.new("TextButton")
+	closeBtn.Size             = UDim2.new(0, 26, 0, 26)
+	closeBtn.Position         = UDim2.new(1, -33, 0.5, -13)
+	closeBtn.BackgroundColor3 = Color3.fromRGB(210, 50, 50)
+	closeBtn.Text             = "✕"
+	closeBtn.TextColor3       = Color3.fromRGB(255, 255, 255)
+	closeBtn.TextSize         = 13
+	closeBtn.Font             = Enum.Font.GothamBold
+	closeBtn.BorderSizePixel  = 0
+	closeBtn.ZIndex           = 4
+	closeBtn.Parent           = titleBar
+	Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 5)
+
+	closeBtn.MouseButton1Click:Connect(function()
+		menuOpen      = false
+		frame.Visible = false
+	end)
+
+	--Hint line 
+	local hintLabel = Instance.new("TextLabel")
+	hintLabel.Size               = UDim2.new(1, -16, 0, 18)
+	hintLabel.Position           = UDim2.new(0, 10, 0, 44)
+	hintLabel.BackgroundTransparency = 1
+	hintLabel.Text               = "RCtrl to toggle  •  Click a key badge to rebind"
+	hintLabel.TextColor3         = Color3.fromRGB(90, 155, 200)
+	hintLabel.TextSize           = 11
+	hintLabel.Font               = Enum.Font.Gotham
+	hintLabel.TextXAlignment     = Enum.TextXAlignment.Left
+	hintLabel.Parent             = frame
+
+	-- Column headers
+	local headersFrame = Instance.new("Frame")
+	headersFrame.Size               = UDim2.new(1, -16, 0, 20)
+	headersFrame.Position           = UDim2.new(0, 8, 0, 65)
+	headersFrame.BackgroundTransparency = 1
+	headersFrame.Parent             = frame
+
+	local function makeColHeader(text, xOffset, width)
+		local lbl = Instance.new("TextLabel")
+		lbl.Size            = UDim2.new(0, width, 1, 0)
+		lbl.Position        = UDim2.new(0, xOffset, 0, 0)
+		lbl.BackgroundTransparency = 1
+		lbl.Text            = text
+		lbl.TextColor3      = GUN_BLUE
+		lbl.TextSize        = 11
+		lbl.Font            = Enum.Font.GothamBold
+		lbl.TextXAlignment  = Enum.TextXAlignment.Left
+		lbl.Parent          = headersFrame
+	end
+	makeColHeader("ON",    2,  34)
+	makeColHeader("KEY",   40, 56)
+	makeColHeader("ACTION", 102, 200)
+
+	-- thin divider
+	local divider = Instance.new("Frame")
+	divider.Size             = UDim2.new(1, -16, 0, 1)
+	divider.Position         = UDim2.new(0, 8, 0, 87)
+	divider.BackgroundColor3 = GUN_BLUE
+	divider.BackgroundTransparency = 0.55
+	divider.BorderSizePixel  = 0
+	divider.Parent           = frame
+
+	-- Scrolling list
+	local scrollFrame = Instance.new("ScrollingFrame")
+	scrollFrame.Size                 = UDim2.new(1, -8, 1, -92)
+	scrollFrame.Position             = UDim2.new(0, 4, 0, 91)
+	scrollFrame.BackgroundTransparency = 1
+	scrollFrame.BorderSizePixel      = 0
+	scrollFrame.ScrollBarThickness   = 4
+	scrollFrame.ScrollBarImageColor3 = GUN_BLUE
+	scrollFrame.CanvasSize           = UDim2.new(0, 0, 0, #keybinds * 46)
+	scrollFrame.Parent               = frame
+
+	local listLayout = Instance.new("UIListLayout", scrollFrame)
+	listLayout.Padding   = UDim.new(0, 4)
+	listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+	-- Row tracking for rebinding UI updates
+	local rowObjects   = {}   -- [index] = { keyBtn, kb }
+	local rebindingIdx = nil  -- index of keybind currently awaiting a new key
+
+	local function cancelRebind()
+		if not rebindingIdx then return end
+		local ro = rowObjects[rebindingIdx]
+		if ro then
+			local stored = ro.kb.key
+			ro.keyBtn.Text             = stored == "esc" and "ESC" or stored:upper()
+			ro.keyBtn.BackgroundColor3 = Color3.fromRGB(22, 30, 48)
+		end
+		rebindingIdx = nil
+	end
+
+	local function updateToggle(btn, enabled)
+		if enabled then
+			btn.BackgroundColor3 = Color3.fromRGB(30, 170, 75)
+			btn.Text             = "ON"
+		else
+			btn.BackgroundColor3 = Color3.fromRGB(170, 40, 40)
+			btn.Text             = "OFF"
+		end
+		btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+	end
+
+	local function buildRow(kb_entry, index)
+		local isEven = index % 2 == 0
+		local row = Instance.new("Frame")
+		row.Name             = "Row_" .. index
+		row.Size             = UDim2.new(1, -4, 0, 42)
+		row.BackgroundColor3 = isEven
+			and Color3.fromRGB(16, 20, 30)
+			or  Color3.fromRGB(12, 15, 23)
+		row.BorderSizePixel  = 0
+		row.LayoutOrder      = index
+		row.Parent           = scrollFrame
+		Instance.new("UICorner", row).CornerRadius = UDim.new(0, 6)
+
+		-- Toggle (ON / OFF)
+		local toggleBtn = Instance.new("TextButton")
+		toggleBtn.Size            = UDim2.new(0, 34, 0, 24)
+		toggleBtn.Position        = UDim2.new(0, 4, 0.5, -12)
+		toggleBtn.TextSize        = 10
+		toggleBtn.Font            = Enum.Font.GothamBold
+		toggleBtn.BorderSizePixel = 0
+		toggleBtn.Parent          = row
+		Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(0, 5)
+		updateToggle(toggleBtn, kb_entry.enabled)
+
+		toggleBtn.MouseButton1Click:Connect(function()
+			kb_entry.enabled = not kb_entry.enabled
+			updateToggle(toggleBtn, kb_entry.enabled)
+		end)
+
+		--  Key badge
+		local keyBtn = Instance.new("TextButton")
+		keyBtn.Size             = UDim2.new(0, 52, 0, 28)
+		keyBtn.Position         = UDim2.new(0, 42, 0.5, -14)
+		keyBtn.Text             = kb_entry.key == "esc" and "ESC" or kb_entry.key:upper()
+		keyBtn.TextSize         = 12
+		keyBtn.Font             = Enum.Font.GothamBold
+		keyBtn.TextColor3       = Color3.fromRGB(220, 235, 255)
+		keyBtn.BackgroundColor3 = Color3.fromRGB(22, 30, 48)
+		keyBtn.BorderSizePixel  = 0
+		keyBtn.Parent           = row
+		Instance.new("UICorner", keyBtn).CornerRadius = UDim.new(0, 5)
+		local keyStroke = Instance.new("UIStroke", keyBtn)
+		keyStroke.Color     = GUN_BLUE
+		keyStroke.Thickness = 1.5
+
+		keyBtn.MouseButton1Click:Connect(function()
+			if rebindingIdx == index then
+				-- second click cancels rebind
+				cancelRebind()
+				return
+			end
+			cancelRebind()
+			rebindingIdx           = index
+			keyBtn.Text            = "?"
+			keyBtn.BackgroundColor3 = Color3.fromRGB(35, 65, 120)
+		end)
+
+		-- Action label 
+		local actionLbl = Instance.new("TextLabel")
+		actionLbl.Size              = UDim2.new(1, -102, 1, 0)
+		actionLbl.Position          = UDim2.new(0, 100, 0, 0)
+		actionLbl.BackgroundTransparency = 1
+		actionLbl.Text              = kb_entry.label
+		actionLbl.TextColor3        = Color3.fromRGB(195, 210, 230)
+		actionLbl.TextSize          = 12
+		actionLbl.Font              = Enum.Font.Gotham
+		actionLbl.TextXAlignment    = Enum.TextXAlignment.Left
+		actionLbl.TextTruncate      = Enum.TextTruncate.AtEnd
+		actionLbl.Parent            = row
+
+		rowObjects[index] = { keyBtn = keyBtn, kb = kb_entry }
+	end
+
+	for i, kb_entry in ipairs(keybinds) do
+		buildRow(kb_entry, i)
+	end
+
+	-- Dragging
+	local dragging  = false
+	local dragStart = Vector2.new()
+	local startPos  = UDim2.new()
+
+	titleBar.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1
+		or input.UserInputType == Enum.UserInputType.Touch then
+			dragging  = true
+			dragStart = Vector2.new(input.Position.X, input.Position.Y)
+			startPos  = frame.Position
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+		if dragging
+		and (input.UserInputType == Enum.UserInputType.MouseMovement
+			or input.UserInputType == Enum.UserInputType.Touch) then
+			local delta = Vector2.new(input.Position.X, input.Position.Y) - dragStart
+			frame.Position = UDim2.new(
+				startPos.X.Scale, startPos.X.Offset + delta.X,
+				startPos.Y.Scale, startPos.Y.Offset + delta.Y
+			)
+		end
+	end)
+
+	UserInputService.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1
+		or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = false
+		end
+	end)
+
+	-- Menu toggle + rebind via UserInputService 
+	UserInputService.InputBegan:Connect(function(input, _gameProcessed)
+		-- Toggle menu with Right Control
+		if input.KeyCode == Enum.KeyCode.RightControl then
+			menuOpen      = not menuOpen
+			frame.Visible = menuOpen
+			return
+		end
+
+		-- Capture rebind key press
+		if rebindingIdx then
+			local newKey
+			if input.KeyCode == Enum.KeyCode.Escape then
+				newKey = "esc"
+			elseif input.KeyCode ~= Enum.KeyCode.Unknown then
+				-- KeyCode.Name is e.g. "A", "F1", "LeftShift" — keep it lowercased
+				newKey = input.KeyCode.Name:lower()
+			end
+
+			if newKey then
+				local ro = rowObjects[rebindingIdx]
+				if ro then
+					ro.kb.key              = newKey
+					ro.keyBtn.Text         = newKey == "esc" and "ESC" or newKey:upper()
+					ro.keyBtn.BackgroundColor3 = Color3.fromRGB(22, 30, 48)
+				end
+				rebindingIdx = nil
+			end
+		end
+	end)
+
+
+	-- LASER SPAWNER
 	local function spawnLaser(part1, part2, parent)
 		local s = lineconnect:Clone()
 		local function makeVal(name, value)
@@ -571,12 +892,12 @@ table.insert(cors, sandbox(MainScript, function()
 		s.Parent   = workspace
 	end
 
-	-- Handles the full grab lifecycle: find target -> move target -> release
+	-- GRAB OBJECT  (with highlight)
 	local function grabObject(mouse)
 		if mousedown then return end
 		mousedown = true
 
-		-- Beam tip coroutine: moves a point part until a grab is confirmed
+		-- Beam tip travels to cursor until a valid part is found
 		coroutine.wrap(function()
 			local p = point:Clone()
 			p.Parent = tool
@@ -585,7 +906,8 @@ table.insert(cors, sandbox(MainScript, function()
 				if mouse.Target then
 					p.CFrame = CFrame.new(mouse.Hit.p)
 				else
-					p.CFrame = CFrame.new(front.Position + CFrame.new(front.Position, mouse.Hit.p).lookVector * 1000)
+					p.CFrame = CFrame.new(
+						front.Position + CFrame.new(front.Position, mouse.Hit.p).lookVector * 1000)
 				end
 				wait()
 			end
@@ -593,41 +915,53 @@ table.insert(cors, sandbox(MainScript, function()
 			p:Remove()
 		end)()
 
-		-- Waits for a valid, non-anchored part under the cursor
+		-- Wait for a valid non-anchored target
 		while mousedown do
 			local t = mouse.Target
 			if t and not t.Anchored then
 				object = t
 				dist   = (object.Position - front.Position).magnitude
+				setHighlight(object)   -- ← white outline + blue glow ON
 				break
 			end
 			wait()
 		end
 
-		-- Move object to follow cursor
+		-- Move object
 		while mousedown do
 			if not object or not object.Parent then break end
 			BP.Parent   = object
-			BP.position = front.Position + CFrame.new(front.Position, mouse.Hit.p).lookVector * dist
+			BP.position = front.Position
+				+ CFrame.new(front.Position, mouse.Hit.p).lookVector * dist
 			wait()
 		end
 
 		BP:Remove()
+		setHighlight(nil)   -- ← highlight OFF
 		object = nil
 		if objval then objval.Value = nil end
 	end
 
-	-- Key bindings while tool is equipped
-	local function handleKey(key, mouse)
-		key = key:lower()
+	-- KEY HANDLER  (reads keybind table; skips disabled entries)
+	local function handleKey(rawKey, mouse)
 
-		if key == "q" then
-			dist = math.max((dist or 5) - 5, 5)                   -- pull object closer
+		local function check(id)
+			local b = kb(id)
+			return b and b.enabled and rawMatches(b.key, rawKey)
+		end
 
-		elseif key == "e" then
-			dist = (dist or 0) + 5                                 -- push object further
+		-- Pull closer
+		if check("pull") then
+			dist = math.max((dist or 5) - 5, 5)
+		end
 
-		elseif key == "t" and object then                          -- freeze object rotation
+		-- Push further
+		if check("push") then
+			dist = (dist or 0) + 5
+		end
+
+		-- Freeze rotation
+		if check("freeze") and object then
 			local bg = Instance.new("BodyGyro", object)
 			bg.maxTorque = Vector3.new(math.huge, math.huge, math.huge)
 			bg.cframe    = CFrame.new(object.CFrame.p)
@@ -635,60 +969,76 @@ table.insert(cors, sandbox(MainScript, function()
 			bg:Remove()
 			object.Velocity    = Vector3.new(0, 0, 0)
 			object.RotVelocity = Vector3.new(0, 0, 0)
+		end
 
-		elseif key == "r" and object then                          -- disintegrate object
+		-- Disintegrate
+		if check("delete") and object then
 			color.BrickColor = BrickColor.Black()
 			point.BrickColor = BrickColor.White()
+			setHighlight(nil)
 			object.Parent = nil
 			wait(0.48)
 			color.BrickColor = BrickColor.new("Toothpaste")
 			point.BrickColor = BrickColor.new("Toothpaste")
+		end
 
-		elseif key == "x" and object then                          -- duplicate grabbed object
+		-- Duplicate
+		if check("duplicate") and object then
 			local clone = object:Clone()
 			for _, v in ipairs(clone:GetChildren()) do
 				if v.ClassName == "BodyPosition" or v.ClassName == "BodyGyro" then v:Remove() end
 			end
 			clone.Parent = object.Parent
+			setHighlight(nil)
 			object    = clone
 			mousedown = false
 			mousedown = true
+			setHighlight(object)
 			spawnLaser(front, object, workspace)
 			while mousedown do
 				if not object.Parent then break end
 				BP.Parent   = object
-				BP.position = front.Position + CFrame.new(front.Position, mouse.Hit.p).lookVector * dist
+				BP.position = front.Position
+					+ CFrame.new(front.Position, mouse.Hit.p).lookVector * dist
 				wait()
 			end
 			BP:Remove()
+			setHighlight(nil)
 			object = nil
 			if objval then objval.Value = nil end
+		end
 
-		elseif key == "c" then                                     -- spawn a weighted cube
+		-- Spawn weighted cube
+		if check("cube") then
 			local cube = Instance.new("Part", workspace)
-			cube.Locked       = true
-			cube.Name         = "WeightedStorageCube"
-			cube.Size         = Vector3.new(4, 4, 4)
-			cube.formFactor   = 0
-			cube.TopSurface   = 0
+			cube.Locked        = true
+			cube.Name          = "WeightedStorageCube"
+			cube.Size          = Vector3.new(4, 4, 4)
+			cube.formFactor    = 0
+			cube.TopSurface    = 0
 			cube.BottomSurface = 0
-			cube.CFrame       = CFrame.new(mouse.Hit.p) + Vector3.new(0, 2, 0)
+			cube.CFrame        = CFrame.new(mouse.Hit.p) + Vector3.new(0, 2, 0)
 			for face = 0, 5 do
 				local d = Instance.new("Decal", cube)
 				d.Name    = "WeightedStorageCubeDecal"
 				d.Texture = "http://www.roblox.com/asset/?id=2662260"
 				d.Face    = face
 			end
+		end
 
-		elseif string.byte(key) == 27 and object then             -- explode object (ESC)
+		-- Explode
+		if check("explode") and object then
 			Instance.new("Explosion", workspace).Position = object.Position
 			color.BrickColor = BrickColor.Black()
 			point.BrickColor = BrickColor.White()
+			setHighlight(nil)
 			wait(0.48)
 			color.BrickColor = BrickColor.White()
 			point.BrickColor = BrickColor.Black()
+		end
 
-		elseif key == "" and object then                           -- hook player to object
+		-- Hook player to object
+		if check("hook") and object then
 			if not hooked then
 				hooked          = true
 				hookBP.position = object.Position
@@ -701,12 +1051,15 @@ table.insert(cors, sandbox(MainScript, function()
 				hooked        = false
 				hookBP.Parent = nil
 			end
+		end
 
-		elseif key == "" then                                      -- reset dist to 15
+		-- Reset distance
+		if check("reset") then
 			dist = 15
 		end
 	end
 
+	-- EQUIP / UNEQUIP
 	tool.Equipped:Connect(function(mouse)
 		local human = tool.Parent.Humanoid
 		human.Changed:Connect(function()
@@ -714,38 +1067,42 @@ table.insert(cors, sandbox(MainScript, function()
 				mousedown = false
 				BP:Remove()
 				point:Remove()
+				setHighlight(nil)
 				tool:Remove()
 			end
 		end)
+
 		mouse.Button1Down:Connect(function() grabObject(mouse) end)
-		mouse.Button1Up:Connect(function() mousedown = false end)
+		mouse.Button1Up:Connect(function()
+			mousedown = false
+			setHighlight(nil)
+		end)
 		mouse.KeyDown:Connect(function(key) handleKey(key, mouse) end)
 		mouse.Icon = "rbxassetid://2184939409"
 	end)
+
+	tool.Unequipped:Connect(function()
+		mousedown = false
+		setHighlight(nil)
+	end)
 end))
 
------------------------------------------------------------------------------
--- deploy and tool persistence
-------------------------------------------------------------------
-
--- Moves the tool into the player's backpack
+-- Deploy and tool persistence
 for _, v in ipairs(mas:GetChildren()) do
 	v.Parent = game:GetService("Players").LocalPlayer.Backpack
 	pcall(function() v:MakeJoints() end)
 end
 mas:Destroy()
 
--- Run all sandboxed scripts
 for _, v in ipairs(cors) do
 	spawn(function() pcall(v) end)
 end
 
--- Re-add the tool after every death so it persists across respawns
 local player    = game:GetService("Players").LocalPlayer
 local savedTool = player.Backpack:WaitForChild("Telekinesis Gun"):Clone()
 
 player.CharacterAdded:Connect(function()
-	wait()  -- let the backpack initialize
+	wait()
 	local hasIt = player.Backpack:FindFirstChild("Telekinesis Gun")
 		or (player.Character and player.Character:FindFirstChild("Telekinesis Gun"))
 	if not hasIt then
